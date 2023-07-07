@@ -1,5 +1,6 @@
 const express = require('express'); 
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const port = process.env.PORT || 5000
 
@@ -24,14 +25,37 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+
+
+    // teachers
+    const teacherCollection = client.db('eeceMain').collection('teachers');
+    app.get('/teachers', async(req, res) => {
+      const query = {};
+      const options =await teacherCollection.find(query).toArray();
+      res.send(options);
+    })
+
+    // contactMessageCollection 
+    const contactMessageCollection = client.db('eeceMain').collection('messageCollection');
+    app.post('/messageCollection', async(req, res) => {
+      const message = req.body
+      console.log(message);
+      const result = await contactMessageCollection.insertOne(message);
+      res.send(result);
+    })
+
+    app.get('/messageCollection', async(req, res) => {
+      const query = {};
+      const options = await contactMessageCollection.find(query).toArray();
+      res.send(options);
+    })
+
+
+
+    
   } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+  
+
   }
 }
 run().catch(console.dir);
