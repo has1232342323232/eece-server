@@ -182,8 +182,31 @@ async function run() {
     });
 
 
-
     // for countdown section
+    const allCountDown = client.db('eeceMain').collection('countDown');
+    app.post('/countDown', async(req, res) =>{
+      const message = req.body
+      const result = await allCountDown.insertOne(message);
+      res.send(result);
+    })
+    app.get('/countDown', async(req, res) =>{
+      const query = {};
+      const options = await allCountDown.find(query).toArray();
+      res.send(options);
+    })
+    app.delete('/countDown/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: new ObjectId(id) };
+      const result = await allCountDown.deleteOne(query);
+      console.log("deleting One", result);
+    
+      if (result.deletedCount === 1) {
+        res.send({ acknowledged: true });
+      } else {
+        res.status(404).send({ acknowledged: false, message: 'Image not found' });
+      }
+    });
 
 
 
