@@ -73,7 +73,7 @@ async function run() {
 
     app.delete('/allRegisterUsers/:id', async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      console.log("Deleted id", id);
       const query = { _id: new ObjectId(id) };
       const result = await registerUsers.deleteOne(query);
       console.log("deleting One", result);
