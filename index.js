@@ -71,13 +71,20 @@ async function run() {
       res.send(user);
     })
 
-
-    app.delete('/allRegisterUsers/:id', async(req, res) => {
+    app.delete('/allRegisterUsers/:id', async (req, res) => {
       const id = req.params.id;
+      console.log(id);
       const query = { _id: new ObjectId(id) };
-      const user = await registerUsers.deleteOne(query);
-      res.send(user);
-    })
+      const result = await registerUsers.deleteOne(query);
+      console.log("deleting One", result);
+    
+      if (result.deletedCount === 1) {
+        res.send({ acknowledged: true });
+      } else {
+        res.status(404).send({ acknowledged: false, message: 'Image not found' });
+      }
+    });
+
 
 
 
