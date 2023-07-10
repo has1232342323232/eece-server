@@ -71,6 +71,17 @@ async function run() {
       res.send(user);
     })
 
+
+    app.delete('/allRegisterUsers/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const user = await registerUsers.deleteOne(query);
+      res.send(user);
+    })
+
+
+
+
     app.get('/allRegisterUsers/admin/:email', async(req, res) => {
       const email =  req.params.email;
       const query = { email };
